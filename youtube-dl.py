@@ -5,8 +5,7 @@ app = Flask(__name__)
 port = int(os.environ.get("PORT") or 5000)
 
 @app.route('/')
-def index():
-    response = Flask.Response()
+def index(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     return f"<h1>Test port: {port}</h1>"
 
