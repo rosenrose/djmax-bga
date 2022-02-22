@@ -1,1 +1,1 @@
-worker: python youtube-dl.py
+web: gunicorn youtube-dl:app
