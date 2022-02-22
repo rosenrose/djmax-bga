@@ -1,1 +1,1 @@
-web: gunicorn youtube-dl:app --bind 0.0.0.0
+web: gunicorn youtube-dl:app
