@@ -1,1 +1,1 @@
-worker: python youtube-dl:app
+worker: python youtube-dl.py
