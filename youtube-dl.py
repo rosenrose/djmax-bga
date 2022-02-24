@@ -1,5 +1,6 @@
 import os
 import re
+import json
 from yt_dlp import YoutubeDL
 from flask import Flask, Response
 
@@ -13,20 +14,21 @@ def index():
     return response
 
 @app.route('/<id>')
-def video_url(id):
+def get_url(id):
     if not re.match(r"[0-9a-zA-Z_\-]{11}", id):
         response = Response("")
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
-    video_src = ""
+    src = {}
     with YoutubeDL({"simulate": True}) as ydl:
         info = ydl.extract_info(f"https://youtu.be/{id}")
         for format in info["requested_formats"]:
             if format["vcodec"] != "none":
-                video_src = format["url"]
-                break
-    response = Response(video_src)
+                src["video"] = format["url"]
+            elif format["acodec"] != "none":
+                src["audio"] = format["url"]
+    response = Response(json.dumps(src))
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
