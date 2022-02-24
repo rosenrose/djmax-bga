@@ -60,7 +60,7 @@ def frame(id):
         .run(capture_stdout=True)
     )
     # print(type(out))
-    open("a.png", "wb").write(out)
+    # open("a.png", "wb").write(out)
     response = make_response(out)
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Content-Type"] = "image/png"
