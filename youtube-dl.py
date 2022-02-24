@@ -8,7 +8,6 @@ from flask import Flask, Response, make_response
 from static_ffmpeg import run
 
 ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
-print(dir(ffmpeg))
 
 app = Flask(__name__)
 port = int(os.environ.get("PORT") or 5000)
@@ -57,16 +56,20 @@ def frame(id):
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
-    # p = subprocess.run([], capture_output=True)
-    # out, err = (
-    #     ffmpeg
-    #     .input(videoUrl, ss=random.randrange(duration))
-    #     .output("pipe:", format="image2", vcodec="png", frames=1, s="1920x1080")
-    #     .run(capture_stdout=True)
-    # )
-    # # print(type(out))
-    # # open("a.png", "wb").write(out)
-    # response = make_response(out)
+    p = subprocess.run([
+        ffmpeg,
+        "-ss", str(random.randrange(duration)),
+        "-i", videoUrl,
+        "-frames", "1",
+        "-s", "1920x1080",
+        "-f", "image2",
+        "-vcodec", "png",
+        "pipe:1"
+        ], capture_output=True)
+    output = p.stdout
+    # print(output)
+    # open("a.png", "wb").write(output)
+    response = make_response(output)
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Content-Type"] = "image/png"
     return response
