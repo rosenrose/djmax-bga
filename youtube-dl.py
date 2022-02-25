@@ -81,7 +81,7 @@ def frame(id):
         "-ss", str(ss),
         "-i", videoUrl,
         "-frames", "1",
-        "-s", "1920x1080",
+        # "-s", "1920x1080",
         "-f", "image2",
         "-vcodec", "png",
         "pipe:1"
