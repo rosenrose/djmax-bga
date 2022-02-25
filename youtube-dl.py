@@ -53,15 +53,18 @@ def index():
 def info(id):
     res = {}
     vidoeInfo = get_info(id)
-    parts = request.args["part"].split(",")
 
-    for part in parts:
-        if part == "url":
-            res |= get_url(vidoeInfo)
-        else:
-            res[part] = vidoeInfo[part]
+    if "part" in request.args:
+        parts = request.args["part"].split(",")
+        for part in parts:
+            if part == "url":
+                res |= get_url(vidoeInfo)
+            else:
+                res[part] = vidoeInfo[part]
 
-    return create_response(json.dumps(res))
+        return create_response(json.dumps(res))
+
+    return create_response(json.dumps(vidoeInfo))    
 
 @app.route('/frame/<id>')
 def frame(id):
