@@ -4,7 +4,7 @@ import json
 import random
 import subprocess
 from yt_dlp import YoutubeDL
-from flask import Flask, Response, make_response
+from flask import Flask, Response, make_response, request
 from static_ffmpeg import run
 
 ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
@@ -33,32 +33,49 @@ def get_url(info):
 
     return src
 
-@app.route('/')
-def index():
-    response = Response(f"<h1>Test port: {port}</h1>")
+def create_response(message, heads={}):
+    if type(message) is str:
+        response = Response(message)
+    else:
+        response = make_response(message)
+
     response.headers["Access-Control-Allow-Origin"] = "*"
+    for key in heads:
+        response.headers[key] = heads[key]
+
     return response
 
-@app.route('/url/<id>')
-def url(id):
-    response = Response(json.dumps(get_url(get_info(id))))
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+@app.route('/')
+def index():
+    return create_response(f"<h1>Test port: {port}</h1>")
+
+@app.route('/info/<id>')
+def info(id):
+    res = {}
+    info = get_info(id)
+    parts = request.args["part"]
+
+    for part in parts:
+        if part == "url":
+            res |= get_url(info)
+        else:
+            res[part] = info[part]
+
+    return create_response(json.dumps(res))
 
 @app.route('/frame/<id>')
 def frame(id):
+    # params = list(request.args.items())
     info = get_info(id)
     duration = info["duration"]
     videoUrl = get_url(info)["video"]
 
     if not videoUrl:
-        response = Response("no video")
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response
+        return create_response("no video")
 
     p = subprocess.run([
         ffmpeg,
-        "-ss", str(random.randrange(duration)),
+        "-ss", request.args["ss"],
         "-i", videoUrl,
         "-frames", "1",
         "-s", "1920x1080",
@@ -69,10 +86,7 @@ def frame(id):
     output = p.stdout
     # print(output)
     # open("a.png", "wb").write(output)
-    response = make_response(output)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Content-Type"] = "image/png"
-    return response
+    return create_response(output, {"Content-Type": "image/png"})
 
 if __name__ == "__main__":
     app.run(port=port)
