@@ -1,7 +1,6 @@
 import os
 import re
 import json
-import random
 import subprocess
 from yt_dlp import YoutubeDL
 from flask import Flask, Response, make_response, request
@@ -70,7 +69,6 @@ def info(id):
 def frame(id):
     # params = list(request.args.items())
     info = get_info(id)
-    duration = info["duration"]
     videoUrl = get_url(info)["video"]
 
     if not videoUrl:
@@ -78,7 +76,7 @@ def frame(id):
 
     p = subprocess.run([
         ffmpeg,
-        "-ss", request.args["ss"],
+        "-ss", request.args["ss"] if "ss" in request.args else "0",
         "-i", videoUrl,
         "-frames", "1",
         "-s", "1920x1080",
