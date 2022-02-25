@@ -52,14 +52,14 @@ def index():
 @app.route('/info/<id>')
 def info(id):
     res = {}
-    info = get_info(id)
+    vidoeInfo = get_info(id)
     parts = request.args["part"].split(",")
 
     for part in parts:
         if part == "url":
-            res |= get_url(info)
+            res |= get_url(vidoeInfo)
         else:
-            res[part] = info[part]
+            res[part] = vidoeInfo[part]
 
     return create_response(json.dumps(res))
 
