@@ -69,14 +69,16 @@ def info(id):
 def frame(id):
     # params = list(request.args.items())
     info = get_info(id)
+    duration = int(info["duration"])
     videoUrl = get_url(info)["video"]
 
     if not videoUrl:
         return create_response("no video")
 
+    ss = min(int(request.args["ss"]), duration) if "ss" in request.args else 0
     p = subprocess.run([
         ffmpeg,
-        "-ss", request.args["ss"] if "ss" in request.args else "0",
+        "-ss", str(ss),
         "-i", videoUrl,
         "-frames", "1",
         "-s", "1920x1080",
