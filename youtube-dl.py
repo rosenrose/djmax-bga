@@ -16,8 +16,7 @@ def get_info(id):
 
     if re.match(r"[0-9a-zA-Z_\-]{11}", id):
         with YoutubeDL({"simulate": True}) as ydl:
-            result = ydl.extract_info(f"https://youtu.be/{id}")
-
+            result = ydl.extract_info(f"https://www.youtube.com/watch?v={id}")
     return result
 
 def get_url(info):
@@ -29,7 +28,6 @@ def get_url(info):
                 src["video"] = format["url"]
             elif format["acodec"] != "none":
                 src["audio"] = format["url"]
-
     return src
 
 def create_response(message, heads={}):
@@ -41,7 +39,6 @@ def create_response(message, heads={}):
     response.headers["Access-Control-Allow-Origin"] = "*"
     for key in heads:
         response.headers[key] = heads[key]
-
     return response
 
 @app.route('/')
@@ -61,8 +58,7 @@ def info(id):
             else:
                 res[part] = videoInfo[part]
         return create_response(json.dumps(res))
-
-    return create_response(json.dumps(videoInfo))    
+    return create_response(json.dumps(videoInfo))
 
 @app.route('/frame/<id>')
 def frame(id):
