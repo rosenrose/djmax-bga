@@ -71,7 +71,7 @@ def frame(id):
     info = get_info(id)
     duration = float(info["duration"])
     videoUrl = get_url(info)["video"]
-
+    print(videoUrl, duration)
     if not videoUrl:
         return create_response("no video")
 
