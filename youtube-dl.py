@@ -53,7 +53,7 @@ def index():
 def info(id):
     res = {}
     info = get_info(id)
-    parts = request.args["part"]
+    parts = request.args["part"].split(",")
 
     for part in parts:
         if part == "url":
