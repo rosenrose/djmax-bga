@@ -64,10 +64,11 @@ def info(id):
 @app.route('/frame/<id>')
 def frame(id):
     # params = list(request.args.items())
+    print(id, "request")
     info = get_info(id)
     duration = float(info["duration"])
     videoUrl = get_url(info)["video"]
-    print(videoUrl, duration)
+    print(id, "extract")
     if not videoUrl:
         return create_response("no video")
 
