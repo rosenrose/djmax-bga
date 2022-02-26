@@ -71,21 +71,27 @@ def info(id):
 def frame(id):
     # params = list(request.args.items())
     print(id, "request")
-    info = get_info(id)
-    duration = float(info["duration"])
-    videoUrl = get_url(info)["video"]
-    print(id, "extract")
-    if not videoUrl:
-        return create_response("no video")
 
-    ss = min(request.args.get("ss", round(random() * duration, 1), type=float), duration - 1)
+    if "static" in request.args:
+        duration = int(request.args["duration"])
+        ext = int(request.args["ext"])
+        videoUrl = f"https://d2l1b145ht03q6.cloudfront.net/djmax/bga/{id}.{ext}"
+    else:
+        info = get_info(id)
+        duration = int(info["duration"])
+        videoUrl = get_url(info)["video"]
+        print(id, "extract")
+        if not videoUrl:
+            return create_response("no video")
+
+    ss = min(request.args.get("ss", round(random() * duration, 1), type=float), duration)
     p = subprocess.run([
         ffmpeg,
         "-ss", str(ss),
         "-i", videoUrl,
         "-frames", "1",
         # "-s", "1920x1080",
-        # "-q:v", "0",
+        "-q:v", "5",
         "-f", "image2",
         "-vcodec", "mjpeg",
         "pipe:1"
