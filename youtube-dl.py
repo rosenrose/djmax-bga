@@ -12,17 +12,17 @@ ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
 app = Flask(__name__)
 port = int(os.environ.get("PORT") or 5000)
 
-try:
-    with YoutubeDL({"simulate": True, "cookiesfrombrowser": ("chrome", )}) as ydl:
-        result = ydl.extract_info(f"https://www.youtube.com/watch?v=vQ_ibsHzmxk")
-except Exception as e:
-    print(e)
+# try:
+#     with YoutubeDL({"simulate": True, "cookiesfrombrowser": ("chrome", )}) as ydl:
+#         result = ydl.extract_info(f"https://www.youtube.com/watch?v=vQ_ibsHzmxk")
+# except Exception as e:
+#     print(e)
 
 def get_info(id):
     result = {}
 
     if re.match(r"[0-9a-zA-Z_\-]{11}", id):
-        with YoutubeDL({"simulate": True}) as ydl:
+        with YoutubeDL({"simulate": True, "sleep_interval": 1}) as ydl:
             result = ydl.extract_info(f"https://www.youtube.com/watch?v={id}")
     return result
 
