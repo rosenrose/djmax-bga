@@ -78,14 +78,15 @@ def frame(id):
         "-i", videoUrl,
         "-frames", "1",
         # "-s", "1920x1080",
+        "-q:v", "0",
         "-f", "image2",
-        "-vcodec", "png",
+        "-vcodec", "mjpeg",
         "pipe:1"
         ], capture_output=True)
     output = p.stdout
     # print(output)
     # open("a.png", "wb").write(output)
-    return create_response(output, heads={"Content-Type": "image/png"})
+    return create_response(output, heads={"Content-Type": "image/jpeg"})
 
 if __name__ == "__main__":
     app.run(port=port)
