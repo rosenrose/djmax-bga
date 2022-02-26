@@ -13,7 +13,7 @@ app = Flask(__name__)
 port = int(os.environ.get("PORT") or 5000)
 
 try:
-    with YoutubeDL({"simulate": True, "cookiesfrombrowser": "chrome"}) as ydl:
+    with YoutubeDL({"simulate": True, "cookiesfrombrowser": ("chrome", )}) as ydl:
         result = ydl.extract_info(f"https://www.youtube.com/watch?v=vQ_ibsHzmxk")
 except Exception as e:
     print(e)
