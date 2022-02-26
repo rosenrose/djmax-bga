@@ -1,1 +1,1 @@
-web: gunicorn youtube-dl:app
+web: gunicorn youtube-dl:app --timeout 60
