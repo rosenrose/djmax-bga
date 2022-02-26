@@ -78,7 +78,7 @@ def frame(id):
         "-i", videoUrl,
         "-frames", "1",
         # "-s", "1920x1080",
-        "-q:v", "0",
+        # "-q:v", "0",
         "-f", "image2",
         "-vcodec", "mjpeg",
         "pipe:1"
