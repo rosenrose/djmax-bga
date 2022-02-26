@@ -2,6 +2,7 @@ import os
 import re
 import json
 import subprocess
+from random import random
 from yt_dlp import YoutubeDL
 from flask import Flask, Response, make_response, request
 from static_ffmpeg import run
@@ -70,7 +71,7 @@ def frame(id):
     if not videoUrl:
         return create_response("no video")
 
-    ss = min(request.args.get("ss", 0, type=float), duration)
+    ss = min(request.args.get("ss", round(random() * duration, 1), type=float), duration)
     p = subprocess.run([
         ffmpeg,
         "-ss", str(ss),
