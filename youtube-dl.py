@@ -74,8 +74,7 @@ def frame(id):
 
     if "static" in request.args:
         duration = int(request.args["duration"])
-        ext = int(request.args["ext"])
-        videoUrl = f"https://d2l1b145ht03q6.cloudfront.net/djmax/bga/{id}.{ext}"
+        videoUrl = f"https://d2l1b145ht03q6.cloudfront.net/djmax/bga/{id}"
     else:
         info = get_info(id)
         duration = int(info["duration"])
