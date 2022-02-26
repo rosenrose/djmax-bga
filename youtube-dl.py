@@ -12,6 +12,9 @@ ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
 app = Flask(__name__)
 port = int(os.environ.get("PORT") or 5000)
 
+with YoutubeDL({"simulate": True, "cookiesfrombrowser": True}) as ydl:
+    result = ydl.extract_info(f"https://www.youtube.com/watch?v=vQ_ibsHzmxk")
+
 def get_info(id):
     result = {}
 
