@@ -85,7 +85,7 @@ def frame(id):
     output = p.stdout
     # print(output)
     # open("a.png", "wb").write(output)
-    return create_response(output, {"Content-Type": "image/png"})
+    return create_response(output, heads={"Content-Type": "image/png"})
 
 if __name__ == "__main__":
     app.run(port=port)
