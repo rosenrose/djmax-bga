@@ -78,7 +78,7 @@ def frame(id):
     if not videoUrl:
         return create_response("no video")
 
-    ss = min(request.args.get("ss", round(random() * duration, 1), type=float), duration)
+    ss = min(request.args.get("ss", round(random() * duration, 1), type=float), duration - 1)
     p = subprocess.run([
         ffmpeg,
         "-ss", str(ss),
